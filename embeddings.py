@@ -3,6 +3,7 @@ import numpy as np
 from experiment_setup import resnet18
 import time
 import datetime
+import pickle
 
 def format_time(elapsed):
     """
@@ -14,7 +15,7 @@ def format_time(elapsed):
     # Format as hh:mm:ss
     return str(datetime.timedelta(seconds=elapsed_rounded))
 
-X_full, y_full = resnet18(split="train", verbose=True)
+X_full = resnet18(split="train", verbose=True)[0]
 
 n = 16000
 d_max = X_full.shape[1]
@@ -24,7 +25,7 @@ pca = PCA(n_components=d_max)
 # Subset.
 np.random.seed(123)
 idx = np.random.permutation(X_full.shape[0])
-X, y = X_full[idx[0:n], :], y_full[idx[0:n]]
+X = X_full[idx[0:n], :]
 
 # Fit on training data and time.
 
@@ -39,12 +40,16 @@ for i, var in enumerate(pca.explained_variance_ratio_):
     cumulative += var
     if cumulative > 0.95:
         print("%0.3f percent of variance explained by first %d dimensions." % (cumulative, i))
+        n_components = i
         break
+
+pca = PCA(n_components=n_components).fit(X)
+pickle.dump(pca, open( "iwildcam/pca.p", "wb" ))
 
 # Apply to validation and test data.
 
 tic = time.time()
-Z_train = pca.transform(X)
+Z_train = pca.transform(X_full)
 Z_val = pca.transform(resnet18(split="val", verbose=True)[0])
 Z_test = pca.transform(resnet18(split="test", verbose=True)[0])
 toc = time.time()
