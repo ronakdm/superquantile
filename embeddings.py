@@ -1,6 +1,6 @@
 from sklearn.decomposition import PCA
 import numpy as np
-from experiment_setup import resnet18
+from utils import resnet18
 import time
 import datetime
 import pickle
