@@ -22,8 +22,32 @@ for i in range(n_jobs):
     diagonal = np.diag(confusion_matrix)
     row_sums = np.sum(confusion_matrix, axis=0)
     column_sums = np.sum(confusion_matrix, axis=1)
-    precision[i] = diagonal / row_sums
-    recall[i] = diagonal / column_sums
-    f1[i] = 2 * precision[i] * recall[i] / (precision[i] + recall[i])
+
+    for j in range(n_classes):
+        precision[i][j] = diagonal[j]/row_sums[j] if row_sums[j] > 0 else -1
+        recall[i][j] = diagonal[j]/column_sums[j] if column_sums[j] > 0 else -1
+        if precision[i][j] < 0 or recall[i][j] < 0 or precision[i][j] + recall[i][j] == 0:
+            f1[i][j] = -1
+        else:
+            f1[i][j] = 2 * precision[i][j] * recall[i][j] / (precision[i][j] + recall[i][j])
+
+macro_f1 = np.zeros(n_jobs)
+for i in range(n_jobs):
+    if np.all(f1[i] >= 0):
+        macro_f1[i] = np.mean(f1[i])
+    else:
+        macro_f1[i] = -1
+
+with open("knn_metrics/accuracy.npy", "wb") as f:
+    np.save(f, accuracy)
+with open("knn_metrics/precision.npy", "wb") as f:
+    np.save(f, precision)
+with open("knn_metrics/recall.npy", "wb") as f:
+    np.save(f, recall)
+with open("knn_metrics/f1.npy", "wb") as f:
+    np.save(f, f1)
+with open("knn_metrics/macro_f1.npy", "wb") as f:
+    np.save(f, macro_f1)
+
 
 # Superquantile accruracy
