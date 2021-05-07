@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "knn.py", line 14, in <module>
+    model = KNeighborsClassifier(n_neighbors=k_range[job_id], weights='distance')
+IndexError: index 10 is out of bounds for axis 0 with size 10

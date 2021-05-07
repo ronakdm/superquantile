@@ -2,7 +2,7 @@
 import sys
 import numpy as np
 from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import confusion_matrix
+# from sklearn.metrics import confusion_matrix
 import pickle
 
 # Get Slurm array job ID.
@@ -19,6 +19,4 @@ model.fit(X_train, y_train)
 X_val, y_val = np.load("iwildcam/Z_val.npy"), np.load("iwildcam/y_val.npy")
 y_pred = model.predict(X_val)
 
-result = confusion_matrix(y_val, y_pred, labels=model.classes_)
-
-pickle.dump(result, open("out/lr_result_%d.p" % job_id, "wb"))
+pickle.dump(y_pred, open("out/lr_y_pred_%d.p" % job_id, "wb"))
