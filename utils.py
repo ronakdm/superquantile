@@ -23,6 +23,25 @@ def compute_confusion_matrix(y_pred):
         mat[y_val[i], y_pred[i]] += 1
 
     return mat
+
+def softmax(Z):
+    np.clip(Z, -10, 10)
+    norm_constant = np.exp(Z).sum(axis=1)
+    
+    return np.exp(Z) / norm_constant
+
+def predict_proba(model, x):
+    """ Gives a prediction of x
+            :param ``numpy.array`` x: input whose label is to predict
+            :return:  value of the prediction
+    """
+    self = model
+    formatted_x = np.ones((x.shape[0], self.n_features + self.fit_intercept))
+    formatted_x[:, self.fit_intercept:] = x
+    casted_sol = np.reshape(self.solution, (self.n_features + self.fit_intercept, self.n_classes))
+    probas = softmax(np.dot(formatted_x, casted_sol))
+    # predictions = np.argmax(probas, axis=1)
+    return probas
         
 
 
