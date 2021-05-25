@@ -13,13 +13,14 @@ best_acc = -1
 best_id = -1
 
 for job_id in jobs:
-    y_pred = pickle.dump(open("out/lr_y_pred_%d.p" % job_id, "rb"))
-    acc = accuracy_score(y_val, y_pred)
+    if job_id != 2 and job_id != 3:
+        y_pred = pickle.dump(open("out/lr_y_pred_%d.p" % job_id, "rb"))
+        acc = accuracy_score(y_val, y_pred)
 
-    if acc > best_acc:
-        best_acc = acc
-        best_C = C_range[job_id]
-        best_id = job_id
+        if acc > best_acc:
+            best_acc = acc
+            best_C = C_range[job_id]
+            best_id = job_id
 
 pickle.dump(best_acc, open("metrics/best_lr_acc.p", "wb"))
 pickle.dump(best_C, open("metrics/best_lr_C.p", "wb"))
