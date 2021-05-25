@@ -1,6 +1,4 @@
 import numpy as np
-import seaborn as sns
-import matplotlib.pyplot as plt
 
 def resnet18(split="val", verbose=False):
     X = np.load('iwildcam/resnet18_features/%s_features.npy' % split)
