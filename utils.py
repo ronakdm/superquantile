@@ -26,7 +26,7 @@ def compute_confusion_matrix(y_pred):
 
 def softmax(Z):
     np.clip(Z, -10, 10)
-    norm_constant = np.exp(Z).sum(axis=1)
+    norm_constant = np.exp(Z).sum(axis=1).reshape(-1, 1)
     
     return np.exp(Z) / norm_constant
 
