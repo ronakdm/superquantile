@@ -70,7 +70,7 @@ metadata = np.load("out/test_meta_0.npy")
 
 np.random.seed(123)
 n = len(y_test)
-idx = np.random.choice(np.arange(n), 10000, replace=False)
+idx = np.random.choice(np.arange(n), 20000, replace=False)
 
 Z = np.dot(X_test[idx], coef.T) + intercept.reshape(1, -1)
 lr_probas = softmax(Z)
