@@ -14,7 +14,7 @@ def sq(arr, p):
     """
     p-superquantile of numpy array.
     """
-    np.mean(arr[arr >= np.quantile(arr, p)])
+    return np.mean(arr[arr >= np.quantile(arr, p)])
 
 def compute_metrics(probas, y_true, metadata, p=0.8, algo="lr"):
     # 1. Test accuracy.
